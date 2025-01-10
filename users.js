@@ -3,10 +3,10 @@ const { MongoClient, ObjectId } = require('mongodb');
 const cors = require('cors');
 
 
-app.resource(cors());
 
 
 const app = express();
+app.resource(cors());
 const port = 8000;
 
 // MongoDB connection details
