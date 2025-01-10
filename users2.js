@@ -1,0 +1,103 @@
+const express = require('express');
+const { MongoClient, ObjectId } = require('mongodb');
+
+const app = express();
+const port = 3000;
+
+// MongoDB connection details
+const uri = "mongodb://127.0.0.1:27017"; 
+const dbName = "yt";
+
+// Middleware
+app.use(express.json());
+
+let db, users;
+
+// Connect to MongoDB and initialize collections
+async function initializeDatabase() {
+    try {
+        const client = await MongoClient.connect(uri, { useUnifiedTopology: true });
+        console.log("Connected to MongoDB");
+
+        db = client.db(dbName);
+        users = db.collection("users");
+
+        // Start server after successful DB connection
+        app.listen(port, () => {
+            console.log(`Server running at http://localhost:${port}`);
+        });
+    } catch (err) {
+        console.error("Error connecting to MongoDB:", err);
+        process.exit(1); // Exit if database connection fails
+    }
+}
+
+// Initialize Database
+initializeDatabase();
+
+// Routes
+
+// GET: List all users// GET: Fetch a user by ID
+app.get('/users/:userId', async (req, res) => {
+    try {
+        const userId = req.params.userId;  // Extracting userId from the URL parameter
+
+        // Find user by userId in the database
+        const user = await User.findOne({ userId: userId });
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Return user details
+        res.json(user);
+    } catch (error) {
+        res.status(500).json({ message: 'Server Error' });
+    }
+});
+
+// POST: Add a new user
+app.post('/users', async (req, res) => {
+    try {
+        const newUser = req.body; // Ensure the request body has the correct data
+        const result = await users.insertOne(newUser); // Insert into the 'users' collection
+        res.status(201).send(`User added with ID: ${result.insertedId}`);
+    } catch (err) {
+        res.status(500).send("Error adding user: " + err.message);
+    }
+});
+
+// PUT: Update a user completely
+app.put('/users/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const updatedUser = req.body;
+        const result = await users.replaceOne({ _id: new ObjectId(id) }, updatedUser);
+        res.status(200).send(`${result.modifiedCount} document(s) updated`);
+    } catch (err) {
+        res.status(500).send("Error updating user: " + err.message);
+    }
+});
+
+// PATCH: Partially update a user
+app.patch('/users/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const updates = req.body;
+        const result = await users.updateOne({ _id: new ObjectId(id) }, { $set: updates });
+        res.status(200).send(`${result.modifiedCount} document(s) updated`);
+    } catch (err) {
+        res.status(500).send("Error partially updating user: " + err.message);
+    }
+});
+
+// DELETE: Remove a user
+app.delete('/users/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const result = await users.deleteOne({ _id: new ObjectId(id) });
+        res.status(200).send(`${result.deletedCount} document(s) deleted`);
+    } catch (err) {
+        res.status(500).send("Error deleting user: " + err.message);
+    }
+});
