@@ -2,7 +2,7 @@ const express = require('express');
 const { MongoClient, ObjectId } = require('mongodb');
 
 const app = express();
-const port = 3002;
+const port = 8000;
 
 // MongoDB connection details
 const uri = "mongodb+srv://ishitatrivedicg:KCT83aMrI0OJe0hw@cluster0.togj8.mongodb.net/"; 
@@ -94,4 +94,3 @@ app.delete('/users/:id', async (req, res) => {
 });
 
 
-app.listen(port)
