@@ -6,7 +6,7 @@ const cors = require('cors');
 
 
 const app = express();
-app.resource(cors());
+app.use(cors());
 const port = 8000;
 
 // MongoDB connection details
