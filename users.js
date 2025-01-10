@@ -2,10 +2,10 @@ const express = require('express');
 const { MongoClient, ObjectId } = require('mongodb');
 
 const app = express();
-const port = 3000;
+const port = 3002;
 
 // MongoDB connection details
-const uri = "mongodb://127.0.0.1:27017"; 
+const uri = "mongodb+srv://ishitatrivedicg:KCT83aMrI0OJe0hw@cluster0.togj8.mongodb.net/"; 
 const dbName = "yt";
 
 // Middleware
@@ -92,3 +92,6 @@ app.delete('/users/:id', async (req, res) => {
         res.status(500).send("Error deleting user: " + err.message);
     }
 });
+
+
+app.listen(port)

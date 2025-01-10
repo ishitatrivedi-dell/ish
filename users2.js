@@ -5,7 +5,7 @@ const app = express();
 const port = 3000;
 
 // MongoDB connection details
-const uri = "mongodb://127.0.0.1:27017"; 
+const uri = "mongodb+srv://ishitatrivedicg:KCT83aMrI0OJe0hw@cluster0.togj8.mongodb.net/"; 
 const dbName = "yt";
 
 // Middleware
